@@ -4,11 +4,12 @@ set -e
 
 DOMAIN="domain.com"
 APP_NAME="AppName"
+PORT="8000"
+
+EMAIL="admin@$DOMAIN"
 APP_DIR="/home/ubuntu/$APP_NAME"
 VENV_PATH="$APP_DIR/venv"
 MODULE="source:create_app()"
-PORT="8000"
-EMAIL="admin@$DOMAIN"
 NGINX_CONF="/etc/nginx/sites-available/$APP_NAME"
 SERVICE_FILE="/etc/systemd/system/$APP_NAME.service"
 
