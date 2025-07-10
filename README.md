@@ -150,120 +150,148 @@ Make sure your domain (e.g. `domain.com`) points to your public IP before runnin
 This setup has you covered from VM creation to full app deployment and live SSL site, all through one script.
 
 
----
 
 
 
-
-
-
-
-
-
-
-
-
-
-# 🖥️ Windows Offline Flask App Deployment Guide
-
-This guide walks you through deploying and managing your Flask app on a **Windows machine with no internet access**, using `app_manager_windows.bat`.
 
 ---
 
-## 📁 Folder Structure
+# 🖥️ Windows Server Guide for Flask App Deployment
 
-Place everything in a single folder like this:
+This guide covers how to work with a Windows server to deploy, manage, and troubleshoot your Flask-based web app using a single powerful tool: `app_manager_windows.bat`.
+
+---
+
+## 🚀 Deployment Tool: `app_manager_windows.bat`
+
+This is your all-in-one command center for managing your app server. It is designed to be run as an Administrator and will automatically handle installation, configuration, and service management for the entire web stack.
+
+### 📦 What It Can Do:
+
+```text
+0) Bootstrap Server         → Install Python, Nginx, NSSM, Certbot & set firewall rules
+1) Setup SSL with Certbot    → Fetch a new SSL certificate from Let's Encrypt
+2) Setup SSL with Existing   → Use certificate files you already have
+
+3) Start Nginx Service       → Start the web server
+4) Stop Nginx Service        → Stop the web server
+5) Reload Nginx Config       → Safely restart Nginx to apply config changes
+
+6) Install/Update App Service→ Create/update the Python app's Windows service
+7) Start App Service         → Start the Flask application
+8) Stop App Service          → Stop the Flask application
+9) Restart App Service       → Restart the running Flask app
+10) View App Logs            → Tail application logs live
+11) View App Status          → See if the app service is running
+12) Uninstall App Service    → Cleanly remove the app service
+```
+
+### ▶️ How to Use It
+
+1.  **Prepare the `installers` folder** (see below).
+2.  **Right-click `app_manager_windows.bat`** and choose **"Run as Administrator"**.
+3.  Choose the action by number from the menu and follow the prompts.
+
+---
+
+## 📁 Required Folder Structure
+
+Before running the script, place it and its required installers into a single folder like this:
 
 ```
 your_folder/
-├── app_manager_windows_interactive.bat
+├── app_manager_windows.bat
 └── installers/
-    ├── python-3.12.2-amd64.exe
+    ├── python-3.12.3-amd64.exe
     ├── nssm-2.24.zip
     └── nginx-1.27.4.zip
 ```
-
-> ✅ Make sure the `installers` folder is next to the `.bat` file.
+> ✅ **Important:** The script automatically finds the files inside `installers` by name (e.g., `python-*.exe`), so exact version numbers in the filenames do not matter.
 
 ---
 
-## 🚀 How to Use
+## ⚙️ How the Script Works
 
-1. **Run the batch file as Administrator**
+The script installs all software to a configurable drive (default is `C:`).
 
+*   **Python App:** `C:\PMAlchemyV4.1\` (includes `venv/` and `logs/`)
+*   **Nginx:** `C:\nginx\`
+*   **NSSM:** `C:\nssm\`
+*   **Certbot Data:** `C:\Certbot\`
+
+Your Flask app's Python dependencies should be listed in `C:\PMAlchemyV4.1\requirements.txt`. The bootstrap process will install them automatically.
+
+Make sure your `source\__init__.py` has a factory function like this:
+```python
+# In source/__init__.py
+from flask import Flask
+
+def create_app():
+    app = Flask(__name__)
+    # ... your routes and logic ...
+    return app
+```
+
+---
+
+## 🧠 Useful Windows Commands (Manual Equivalents)
+
+### 🔥 Service Control (using `nssm` or `sc`)
 ```cmd
-Right click > Run as Administrator
+nssm status nginx
+nssm start PMAlchemyV4.1
+
+sc query nginx
+sc start PMAlchemyV4.1
 ```
 
-2. **Choose from the menu**:
-
-```
-0) Setup server (install Python, nginx and NSSM from installers)
-1) Setup nginx config + start nginx
-2) Install app as service (NSSM)
-3) Start app
-4) Stop app
-5) Restart app
-6) View app status
-7) View app logs
-8) Uninstall app service
-```
-
----
-
-## 🔧 What Each Option Does
-
-### 0) Setup Server
-- Installs Python silently
-- Creates virtual environment and installs `waitress`
-- Extracts `nssm` and `nginx` from ZIP files
-
-### 1) Setup nginx
-- Configures nginx as a reverse proxy to `127.0.0.1:8000`
-- Starts nginx using `nginx.exe`
-
-### 2) Install Service
-- Registers your Flask app as a **Windows service** using NSSM
-- Ensures it runs on boot and stays alive after user logout
-
-### 3–5) Control the Flask service
-- Start, stop, or restart your app like a normal Windows service
-
-### 6) Check Status
-- Displays whether the app is running
-
-### 7) View Logs
-- Tails the stdout log (`out.log`) using PowerShell live output
-
-### 8) Uninstall
-- Removes the NSSM-based service cleanly
-
----
-
-## 🔐 Security Notes
-
-By default, the service runs as `Local System`. If you need domain access (e.g., to UNC shares or other AD resources), you can manually set the service account:
-
+### 📡 Port Check
+Find what's using port 80:
 ```cmd
-nssm set AppName ObjectName "DOMAIN\youradmin" "YourPassword"
+netstat -ano -p TCP | findstr ":80"
+tasklist /FI "PID eq <PID_FROM_PREVIOUS_COMMAND>"
 ```
 
-Make sure that user has **Log on as a service** rights (`secpol.msc`).
+### 📝 Live Logs
+```powershell
+# This is what the script's log viewer runs
+Get-Content -Path C:\PMAlchemyV4.1\logs\app.log -Wait -Tail 10
+```
 
----
-
-## 🧪 Test After Setup
-
-Visit:
+### 🧪 Test Site
+After setup, check the site from a browser on the server:
 ```
 http://localhost
 ```
+Or after SSL setup:
+```
+https://domain.com
+```
 
-You should see your Flask app loaded via nginx reverse proxy.
+---
+
+## 💡 Recommended First-Time Setup
+
+1.  Place required installers in the `installers` folder.
+2.  Run the script as Administrator and choose **Option 0**. This will install Python, Nginx, NSSM, Certbot (via pip), and configure the firewall. **You may need to restart the terminal after this step.**
+3.  Choose your SSL method:
+    *   **Option 1** to fetch a live certificate from Let's Encrypt (requires a public domain and open ports).
+    *   **Option 2** to use certificate files you've placed on the server manually.
+4.  Choose **Option 6** to install your Python application as a Windows service.
+5.  Choose **Option 7** to start your app service.
+6.  Choose **Option 3** to start the Nginx service.
+
+Your site is now live!
+
+---
+
+## 🔗 Domain & SSL Notes
+
+*   **For Certbot (Option 1):** Before running, make sure your domain's DNS "A" record points to your server's public IP address. Your firewall and router must allow traffic on **port 80** from the public internet.
+*   **For Existing Certs (Option 2):** Before running, place your `fullchain.pem` and `privkey.key` files in the location specified by the `EXISTING_CERT_PATH` and `EXISTING_KEY_PATH` variables at the top of the script.
 
 ---
 
 ## 🙌 Done!
 
-Now you've got a 100% offline-capable deployment for Flask on Windows using Python, nginx, and NSSM — script-controlled, persistent, and production-ready.
-
+This script provides a complete, automated solution for deploying a production-ready Flask application on a Windows server, covering everything from initial setup to ongoing management and SSL configuration.
