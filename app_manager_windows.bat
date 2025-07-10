@@ -244,7 +244,7 @@ goto choice_%choice% 2>nul || goto invalid_choice
         "%NSSM_EXE%" install %NGINX_SERVICE_NAME% "%NGINX_DIR%\nginx.exe"
         "%NSSM_EXE%" set %NGINX_SERVICE_NAME% AppDirectory "%NGINX_DIR%"
         "%NSSM_EXE%" set %NGINX_SERVICE_NAME% AppParameters "-g \"daemon off;\""
-        "%NSSM_EXE%" set %NGINX_SERVICE_NAME% DisplayName "Nginx Web Server"
+        "%NSSM_EXE%" set %NGINX_SERVICE_NAME% DisplayName "App Manager Nginx Web Server"
         echo Nginx service installed.
     ) else (
         echo Nginx service already installed.
@@ -434,7 +434,7 @@ goto choice_%choice% 2>nul || goto invalid_choice
     echo [6] Installing/Updating %APP_NAME% service...
     "%NSSM_EXE%" install "%APP_SERVICE_NAME%" "%VENV_PATH%\Scripts\python.exe" "-m waitress --call --host=127.0.0.1 --port=%PORT% %MODULE%"
     "%NSSM_EXE%" set "%APP_SERVICE_NAME%" AppDirectory "%APP_DIR%"
-    "%NSSM_EXE%" set "%APP_SERVICE_NAME%" DisplayName "%APP_NAME% Application"
+    "%NSSM_EXE%" set "%APP_SERVICE_NAME%" DisplayName "App Manager %APP_NAME% Application"
     "%NSSM_EXE%" set "%APP_SERVICE_NAME%" AppStdout "%LOG_DIR%\app.log"
     "%NSSM_EXE%" set "%APP_SERVICE_NAME%" AppStderr "%LOG_DIR%\app.log"
     "%NSSM_EXE%" set "%APP_SERVICE_NAME%" AppRotateFiles 1
