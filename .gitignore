@@ -1,0 +1,21 @@
+# ignore node_modules directory
+node_modules/
+
+# ignore production directory
+Production/
+
+# ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# ignore local env vars
+.env
+
+# ignore build artifacts
+dist/
+build/
+*.log
+
+
+# ignore old readme file
+README-old.md
