@@ -15,7 +15,9 @@ __pycache__/
 dist/
 build/
 *.log
-
+venv/
+.venv/
+.idea/
 
 # ignore old readme file
 README-old.md

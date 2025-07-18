@@ -6,9 +6,11 @@ This new version uses more engaging language, emojis, and a clear, visually appe
 
 # 🚀 Launchpad: Automated Web App Deployment Scripts
 
-<p align="center">
-  <img src="https://i.imgur.com/u4g5jT5.png" alt="Project Banner" width="700"/>
-</p>
+[//]: # (<p align="center">)
+
+[//]: # (  <img src="https://i.imgur.com/u4g5jT5.png" alt="Project Banner" width="700"/>)
+
+[//]: # (</p>)
 
 Welcome to **Launchpad**! This project provides a collection of powerful, menu-driven scripts that transform the complex task of deploying web applications into a simple, automated process.
 
