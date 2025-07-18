@@ -1,10 +1,12 @@
 # 🚀 Launchpad: Automated Web App Deployment Scripts
 
-[//]: # (<p align="center">)
+---
 
-[//]: # (  <img src="https://i.imgur.com/u4g5jT5.png" alt="Project Banner" width="700"/>)
+<p align="center">
+  <img src="./Assets/undraw_dev-environment.svg" alt="Launchpad deployment banner" width="400"/>
+</p>
 
-[//]: # (</p>)
+---
 
 Welcome to **Launchpad**! This project provides a collection of powerful, menu-driven scripts that transform the complex task of deploying web applications into a simple, automated process.
 
