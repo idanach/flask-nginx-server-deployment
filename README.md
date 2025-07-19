@@ -105,6 +105,17 @@ Everything is organized by operating system and complexity.
 - **Application Code Ready:** Have your Python web application's source code and `requirements.txt` file ready for deployment.
 - **(Windows Only)**: Before you begin, you **must** download and place the required installers (Python, Nginx, NSSM, OpenSSL) into the `Windows/installers` folder. This is a critical first step!
 
-## License
+## 📜 License
 
-This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+## 😋 If you liked this project
+⭐ Please leave a Star ;)
+
+and support me going to college :
+<p>
+  <a href="https://www.buymeacoffee.com/idanach" target="_blank">
+    <img src="https://i.imgur.com/5X29MVY.png" alt="Buy Me A Coffee" height="60dp">
+  </a>
+</p>
